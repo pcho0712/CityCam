@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         const handleSpacePress = debounce((e: KeyboardEvent) => {
             if (e.code === 'Space') {
-                handleCapture(); // キャプチャ処理
+                handleCapture(''); // 
             }
         }, 300);
 
