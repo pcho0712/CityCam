@@ -4,8 +4,23 @@ import CameraComponent from '../components/CameraComponent';
 
 
 const HomePage: React.FC = () => {
+    const [cameraPermission, setCameraPermission] = useState<string | null>(null); // null: 未確認, 'granted': 許可, 'denied': 拒否
     const [screenshots, setScreenshots] = useState<string[]>([]);
     const [autoSave, setAutoSave] = useState<boolean>(false); // ローカル保存のステート
+
+
+    useEffect(() => {
+        // ここでgetUserMediaを呼び出してカメラへのアクセスを試みます
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                setCameraPermission('granted'); // カメラへのアクセスが許可された
+                stream.getTracks().forEach(track => track.stop()); // ストリームを終了
+            })
+            .catch(function(error) {
+                setCameraPermission('denied'); // カメラへのアクセスが拒否された
+                console.error("Camera access denied:", error);
+            });
+    }, []);
 
     const handleCapture = (dataUrl: string) => {
         setScreenshots((prev) => {
@@ -58,6 +73,8 @@ const HomePage: React.FC = () => {
             <Typography variant="h4" gutterBottom>
                 CityCamera Project
             </Typography>
+            {cameraPermission === 'denied' && <p>カメラへのアクセスが拒否されました。</p>}
+
 
             <CameraComponent onCapture={handleCapture} />
 
