@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
             if (e.code === 'Space') {
                 handleCapture(''); // 
             }
-        }, 300);
+        }, 1000);
 
         window.addEventListener('keydown', handleSpacePress);
 
